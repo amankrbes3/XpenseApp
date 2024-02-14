@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 enum Filter {
   isVeg,
@@ -26,13 +25,6 @@ class _FilterScreenState extends State<FilterScreen>{
   var _isNonVegSelected = false;
   var _isVeganSelected = false;
   var _isGlutenFreeSelected = false;
-  // final url = Uri.parse('https://deku.posstree.com/en/');
-  void openURL(String url ) async {
-    final URL = Uri.parse(url);
-    if (await canLaunchUrl(URL)) {
-      launchUrl(URL, mode: LaunchMode.externalApplication);
-    }
-  }
 
   @override
   void initState(){
@@ -87,10 +79,6 @@ class _FilterScreenState extends State<FilterScreen>{
                     _isGlutenFreeSelected = isChecked;
                   });
                 },
-              ),
-              ElevatedButton(
-                onPressed: (){},
-                child: Text('Open Url'),
               ),
             ],
           ),
