@@ -4,24 +4,27 @@ import 'package:meals_app/model/meal.dart';
 import 'package:meals_app/screens/categories_screen.dart';
 import 'package:meals_app/screens/filter_screen.dart';
 import 'package:meals_app/screens/meals_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../providers/meals_provider.dart';
 
 const kInitialFilters = {
   Filter.isGlutenFree: false,
   Filter.isVeg: false,
-  Filter.isNonVeg: false,
+  Filter.isLactoseFree: false,
   Filter.isVegan: false
 };
 
-class TabsScreen extends StatefulWidget{
+class TabsScreen extends ConsumerStatefulWidget{
   const TabsScreen({super.key});
 
   @override
-  State<TabsScreen> createState(){
+  ConsumerState<TabsScreen> createState(){
     return _TabsScreenState();
   }
 }
 
-class _TabsScreenState extends State<TabsScreen>{
+class _TabsScreenState extends ConsumerState<TabsScreen>{
   final List<Meal> favoriteMeals = [];
   int _selectedPageIndex = 0;
   var activePageTitle = '';
@@ -55,7 +58,8 @@ class _TabsScreenState extends State<TabsScreen>{
 
   @override
   Widget build(BuildContext context){
-    Widget selectedTab = CategoriesScreen(onToggleFavorite: _toggleFavoriteMeal,);
+    final meals = ref.watch(mealsProvider);
+    Widget selectedTab = CategoriesScreen(availableMeal: meals , onToggleFavorite: _toggleFavoriteMeal,);
     var activePageTitle = 'Your Favorites';
     if(_selectedPageIndex == 1){
       selectedTab = MealsScreen(meals: favoriteMeals,onToggleFavorite: _toggleFavoriteMeal,);
