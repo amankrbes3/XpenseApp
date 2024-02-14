@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 enum Filter {
   isVeg,
-  isNonVeg,
+  isLactoseFree,
   isVegan,
   isGlutenFree
 }
@@ -22,7 +22,7 @@ class FilterScreen extends StatefulWidget{
 
 class _FilterScreenState extends State<FilterScreen>{
   var _isVegSelected = false;
-  var _isNonVegSelected = false;
+  var _isLactoseSelected = false;
   var _isVeganSelected = false;
   var _isGlutenFreeSelected = false;
 
@@ -30,7 +30,7 @@ class _FilterScreenState extends State<FilterScreen>{
   void initState(){
     super.initState();
     _isVegSelected = widget.currentFilters[Filter.isVeg]!;
-    _isNonVegSelected = widget.currentFilters[Filter.isNonVeg]!;
+    _isLactoseSelected = widget.currentFilters[Filter.isLactoseFree]!;
     _isVeganSelected = widget.currentFilters[Filter.isVegan]!;
     _isGlutenFreeSelected = widget.currentFilters[Filter.isGlutenFree]!;
   }
@@ -54,11 +54,11 @@ class _FilterScreenState extends State<FilterScreen>{
                 },
               ),
               SwitchListTile(
-                title: Text('Non-Vegetarian'),
-                value: _isNonVegSelected,
+                title: Text('Is Lactose Free'),
+                value: _isLactoseSelected,
                 onChanged: (isChecked){
                   setState(() {
-                    _isNonVegSelected = isChecked;
+                    _isLactoseSelected = isChecked;
                   });
                 },
               ),
@@ -85,7 +85,7 @@ class _FilterScreenState extends State<FilterScreen>{
           onWillPop: () async {
             Navigator.of(context).pop({
               Filter.isVeg:_isVegSelected,
-              Filter.isNonVeg:_isNonVegSelected,
+              Filter.isLactoseFree:_isLactoseSelected,
               Filter.isVegan:_isVeganSelected,
               Filter.isGlutenFree:_isGlutenFreeSelected
             });

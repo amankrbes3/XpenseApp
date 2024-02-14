@@ -8,7 +8,7 @@ import 'package:meals_app/screens/meals_screen.dart';
 const kInitialFilters = {
   Filter.isGlutenFree: false,
   Filter.isVeg: false,
-  Filter.isNonVeg: false,
+  Filter.isLactoseFree: false,
   Filter.isVegan: false
 };
 
