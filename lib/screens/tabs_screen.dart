@@ -7,6 +7,7 @@ import 'package:meals_app/screens/meals_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/meals_provider.dart';
+import 'package:meals_app/providers/favorites_provider.dart';
 
 const kInitialFilters = {
   Filter.isGlutenFree: false,
@@ -36,33 +37,52 @@ class _TabsScreenState extends ConsumerState<TabsScreen>{
         _selectedPageIndex = index;
     });
   }
-  void _showMessageInfo(String msg){
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
-  }
-
-  void _toggleFavoriteMeal(Meal meal){
-      if(favoriteMeals.contains(meal)){
-        setState(() {
-          favoriteMeals.remove(meal);
-          _showMessageInfo('Removed successfully from Favorites');
-        });
-      }else{
-        setState(() {
-          favoriteMeals.add(meal);
-          _showMessageInfo('Added successfully to Favorites');
-        });
-
-      }
-  }
+  // void _showMessageInfo(String msg){
+  //   ScaffoldMessenger.of(context).clearSnackBars();
+  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  // }
+  // this method is added in favoritesProvider
+  // void _toggleFavoriteMeal(Meal meal){
+  //     if(favoriteMeals.contains(meal)){
+  //       setState(() {
+  //         favoriteMeals.remove(meal);
+  //         _showMessageInfo('Removed successfully from Favorites');
+  //       });
+  //     }else{
+  //       setState(() {
+  //         favoriteMeals.add(meal);
+  //         _showMessageInfo('Added successfully to Favorites');
+  //       });
+  //
+  //     }
+  // }
 
   @override
   Widget build(BuildContext context){
     final meals = ref.watch(mealsProvider);
-    Widget selectedTab = CategoriesScreen(availableMeal: meals , onToggleFavorite: _toggleFavoriteMeal,);
+    final availableMeals = meals.where(
+        (meal) {
+          if(!meal.isVegetarian && _selectedFilters[Filter.isVeg]!){
+            return false;
+          }
+          if(!meal.isLactoseFree && _selectedFilters[Filter.isLactoseFree]!){
+            return false;
+          }
+          if(!meal.isGlutenFree && _selectedFilters[Filter.isGlutenFree]!){
+            return false;
+          }
+          if(!meal.isVegan && _selectedFilters[Filter.isVegan]!){
+            return false;
+          }
+          return true;
+        }
+    ).toList();
+
+    final favoriteMeals = ref.watch(favoritesMealProvider);
+    Widget selectedTab = CategoriesScreen(availableMeal: availableMeals);
     var activePageTitle = 'Your Favorites';
     if(_selectedPageIndex == 1){
-      selectedTab = MealsScreen(meals: favoriteMeals,onToggleFavorite: _toggleFavoriteMeal,);
+      selectedTab = MealsScreen(meals: favoriteMeals);
     } else{
       activePageTitle = 'Pick Your Categories';
     }
